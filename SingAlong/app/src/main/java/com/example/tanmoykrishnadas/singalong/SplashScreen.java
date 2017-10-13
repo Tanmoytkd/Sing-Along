@@ -1,9 +1,9 @@
 package com.example.tanmoykrishnadas.singalong;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Random;
 
@@ -21,12 +21,26 @@ public class SplashScreen extends AppCompatActivity {
         TextView slogan = (TextView) findViewById(R.id.appslogan);
         sloganText = "Weather - SING IT!";
 
-        TextViewAnimation(0, 150, slogan);
-
-
-
+        TextViewAnimation(0, 200, slogan);
         slogan.setText(sloganText);
-        //Toast.makeText(getApplicationContext(), slogan.getText(), Toast.LENGTH_LONG).show();
+
+        Thread timer=new Thread(){
+            public void run(){
+                try
+                {
+                    sleep(2000);
+                }
+                catch (InterruptedException en)
+                {
+                    en.printStackTrace();
+                }
+                finally {
+                    Intent music=new Intent(SplashScreen.this, MusicPlayer.class);
+                    startActivityForResult(music, 123);
+                }
+            }
+        };
+        timer.start();
     }
 
     public void TextViewAnimation(int start, int finish, final TextView slogan) {
@@ -61,28 +75,18 @@ public class SplashScreen extends AppCompatActivity {
                         }
                     });
                     counter1++;
-
                 }
-                //slogan.setText(sloganText);
             }
         }).start();
-
-
     }
 
-//    String generateSlogan() {
-//        Random rand = new Random();
-//        int[] indices = new int[]{0, 1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 15, 16, 17};
-//        String ret = "Weather - SING IT!";
-//        for(int position: indices) {
-//            char ch = ret.charAt(position);
-//            if(Character.isUpperCase(ch)) {
-//                ret = ret.substring(0, position) + ('A' + (rand.nextInt() % 26)) + ret.substring(position + 1);
-//            } else {
-//                ret = ret.substring(0, position) + ('a' + (rand.nextInt() % 26)) + ret.substring(position + 1);
-//            }
-//        }
-//        Toast.makeText(getApplicationContext(), ret, Toast.LENGTH_LONG);
-//        return ret;
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            finish();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
 }
